@@ -1,0 +1,68 @@
+==================================================================
+https://keybase.io/saahil
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of https://saahil.github.io
+  * I am saahil (https://keybase.io/saahil) on keybase.
+  * I have a public key with fingerprint 95B6 F5C0 DA05 0610 297D  680C 649A 31D9 4993 1A8C
+
+To do so, I am signing this object:
+
+{
+    "body": {
+        "key": {
+            "fingerprint": "95b6f5c0da050610297d680c649a31d949931a8c",
+            "host": "keybase.io",
+            "key_id": "649a31d949931a8c",
+            "kid": "0101a5328a8822dba30ab1742b1a1559278f3bf0bc8667b4cd41b42dc43c5bcfca9d0a",
+            "uid": "b6f4b6e33e72ebccf8b6ab43453cad19",
+            "username": "saahil"
+        },
+        "service": {
+            "hostname": "saahil.github.io",
+            "protocol": "https:"
+        },
+        "type": "web_service_binding",
+        "version": 1
+    },
+    "ctime": 1442224258,
+    "expire_in": 157680000,
+    "prev": "acaff99de430f849ccc6ca1a92fb76b78868bcbdaf7b3944231e0126903e937a",
+    "seqno": 4,
+    "tag": "signature"
+}
+
+which yields the signature:
+
+-----BEGIN PGP MESSAGE-----
+Version: Keybase OpenPGP v2.0.43
+Comment: https://keybase.io/crypto
+
+yMIfAnicbZJbSBRRGMd31ZKWglXSl7LLhIFmNnPmzG2RpItFZUZFCSZt55w5406u
+u+vMqJnZxZfyoSIhkLAQl8hCWKjoRjcrCtOohB7yIZEKqRShm0WknbF6CDovh/N9
+/+93vu/P92BWssfn/VhX3k3i5kNvb/eqGs+2r61NDRyO6vVcoIGrpFOXYUYqqBWz
+zIjDBThNwrIhEV5HvMTLAg80RZdVnshQQ6Kga1DTRAGphMvjQlHbrWAYjGyab0ZZ
+jD2Cps6i/9FXTiV4gReQJAIVqSoAOkYij7CgQIAFJEiSBhTVELHBY6LKsoIh0aGA
+IdAJFImEiUGQpvOI4WqmcKxbiGUqilQBFBNiqFhGGIpQEgnSBc0V2tSKoCrK1DZC
+ITPMNeZxLFZrEuoa4M7xTz6/wnRCNfj3RDEr6kRJNMyyIceJ2QG32qmPufI6ioN/
+QEFsRnTmJKuopZZtRiNcQGBK4pguWYAQAACBpOZxdE/MtGjQdBWSwsxlx/2H1jIk
+IsgwNE2nUOQNFWqEEJkgAWnAwIqMFVWVVUywjgwFixqjigLlBSBrvEg1UXGNsWl1
+JMoFIGsTVbhDmRUR5NRYlGu8d7c8xeP1eaZPS3J3weOb4f+7IcXHUicWDKxH9602
+OuhHd+KbSpqHUsafXni2tn/o27qMQ3ze47TvRy53DRwZtNP0JTPJk7HJcw1Veydb
+Wqvn3TkBbo5t3ZbzfHPmq6L0lkBBclpWa+v0c4d7ilITizub0pYe9/cYZfF+IBzf
+uP3E3IMduYncvl3XDoSGi/vy92fEY3DRsvGRWOLKaPqcFxfXtl/aUHXb2L3mU3sz
+6c7o8C/07exd3WV9KSstLLwhzf5QeWb/8KVTCxKf285mXR9QuxfVHnUA12wWpN+6
+lvP67fzlq99teVR+vrggi1dKS342dp4+efn9vpehifZ11XVvUs9mHr39Iz5an311
+RzicPeLN5vtXtKxM+gUhwSmN
+=KwpZ
+-----END PGP MESSAGE-----
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/saahil
+
+==================================================================
+

@@ -1,0 +1,22 @@
+{
+  "short_name": "Saahil's Tech and Personal Space",
+  "name": "Saahil's Tech and Personal Space",
+  "description": "On this website, I write my thoughts, tasks and everything that doesn't belong anywhere else.",
+  "icons": [
+    {
+      "src": "/splash-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    },
+    {
+      "src": "/favicon-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "scope": "/",
+  "theme_color": "#ffffff"
+}

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<url>
+<loc>http://localhost:4000/about/</loc>
+</url>
+<url>
+<loc>http://localhost:4000/contact/</loc>
+</url>
+<url>
+<loc>http://localhost:4000/</loc>
+</url>
+<url>
+<loc>http://localhost:4000/thanks/</loc>
+</url>
+<url>
+<loc>http://localhost:4000/files/Coursera-bigdata-edu-certi-2017.pdf</loc>
+<lastmod>2021-02-05T07:21:47+01:00</lastmod>
+</url>
+<url>
+<loc>http://localhost:4000/files/Coursera-nlangp-2017-certi.pdf</loc>
+<lastmod>2021-02-05T07:21:47+01:00</lastmod>
+</url>
+<url>
+<loc>http://localhost:4000/files/SaahilOgnawala-CV.pdf</loc>
+<lastmod>2021-02-18T15:51:35+01:00</lastmod>
+</url>
+<url>
+<loc>http://localhost:4000/files/SaahilOgnawala.pdf</loc>
+<lastmod>2022-02-02T06:49:11+01:00</lastmod>
+</url>
+</urlset>
