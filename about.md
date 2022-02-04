@@ -17,4 +17,4 @@ Some of my publications are listed [here](https://scholar.google.com/citations?u
 
 I'm interested in artificial intelligence, open-access publishing and the intersection of technology+journalism. I enjoy kickboxing, bouldering, baking, films, hip-hop and books.
 
-I am on [Goodreads](https://www.goodreads.com/user/show/4789323-saahil-ognawala), [Github](https://github.com/saahil), [Twitter](https://twitter.com/saahil), [LinkedIn](https://de.linkedin.com/in/saahilognawala) and [Instagram](https://www.instagram.com/saahil_in/?hl=en). My updated CV can be found [here](/files/SaahilOgnawala-CV.pdf). 
+I am on [Goodreads](https://www.goodreads.com/user/show/4789323-saahil-ognawala), [Github](https://github.com/saahil), [Twitter](https://twitter.com/saahil), [LinkedIn](https://de.linkedin.com/in/saahilognawala) and [Instagram](https://www.instagram.com/saahil_in/?hl=en). 

@@ -6,4 +6,4 @@ summary:    How I failed my German driving licence test for the second time.
 categories: personal Germany
 ---
 
-It's possible that I hone other skills that do not have to reflect how I can't notice small white dots at large intersections. 
+It's possible that I possess other skills that have nothing to do with how I can't notice small white dots at large intersections. 
