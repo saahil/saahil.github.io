@@ -7,8 +7,6 @@ tags: about
 
 # Hi
 
-## I am Saahil.
-
 I currently work as a data scientist for a large reinsurance company, where my work involves developing AI products (such as knowledge graphs) and leading teams of software engineers, data scientists and data engineers to solve challenging underwriting, pricing, and analytics problems using [augmented data management](https://www2.deloitte.com/nl/nl/pages/enterprise-technology-and-performance/articles/augmented-data-management-beyond-the-hype.html).
 
 I hold a doctorate from the [Chair of Software and Systems Engineering](https://www.in.tum.de/en/i04/homepage/) at Technical University of Munich.
