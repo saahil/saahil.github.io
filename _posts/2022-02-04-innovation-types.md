@@ -9,7 +9,7 @@ Here's a interesting paraphrased quote about types of innovation, from a book I'
 
 > "Steam engines increased global productivity by many orders of magnitude...(while)...1970s saw a decline in American national productivity, seemingly reflected in the kind of innovations such as replacing window room air-conditioners with central building air-conditioners."
 >
-> -- <cite>The Second Machine Age: Work, Progress, and Prosperity in a Time of Brilliant Technologies, _Andrew McAfee and Erik Brynjolfsson_ </cite>
+> -- <cite>[The Second Machine Age: Work, Progress, and Prosperity in a Time of Brilliant Technologies](https://www.goodreads.com/book/show/23316526-the-second-machine-age), _Andrew McAfee and Erik Brynjolfsson_ </cite>
 
 The quote kept me up a while trying to think of similar examples
 
