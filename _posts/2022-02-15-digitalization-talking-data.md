@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      Why Aren't Data Behemoths Crushing It Harder?
-date:       2022-02-10 21:37:00
+date:       2022-02-15 21:00:00
 summary:    Digitalization is more than document scans.
 categories: technology data
 ---
@@ -13,4 +13,4 @@ It isn't enough that historical data is digitalized and suitably archived - what
 Activated data is fresh (despite being old), malleable, and vocal (_"talk to your data, and data talks back"_).
 Activated data knows what it is.
 
-Semantic web was/is a magnificent achievement, in terms of categorizing and standardizing data on the internet. Domain Knowledge Graphs can build upon the semantic web to _activate_ data, and enable organizations to make decisions and generate value. 
+Semantic web is already a magnificent achievement, in terms of categorizing and standardizing data on the internet. Domain Knowledge Graphs can even further build upon the semantic web idea to _activate_ data, and enable organizations to make decisions and generate value. 
