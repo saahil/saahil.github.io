@@ -1,11 +1,7 @@
 ---
 layout:     post
 title:      Why Aren't Data Behemoths Crushing It Harder?
-<<<<<<< HEAD:_posts/2022-02-22-digitalization-talking-data.md
 date:       2022-02-22 21:00:00
-=======
-date:       2022-02-25 21:00:00
->>>>>>> 9fd6e93fa60499acec7b98f58f53f361cc6fa869:_posts/2022-02-15-digitalization-talking-data.md
 summary:    Digitalization is more than document scans.
 categories: technology data
 ---
