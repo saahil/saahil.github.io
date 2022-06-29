@@ -4,7 +4,7 @@ email:       saahil.in@gmail.com
 author:      Saahil Ognawala
 description: "On this website, I write my thoughts, tasks and everything that doesn't belong anywhere else."
 baseurl:     ""
-url:         "saahil.github.io"
+url:         "saahilognawala.com"
 date_format: "%b %-d, %Y"
 header_pages:
  - about.md
