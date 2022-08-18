@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      Data Quality Metrics for Everybody
-date:       2022-08-18 07:00:00
+date:       2022-08-17 07:00:00
 summary:    To solve one of the biggest pains in ML projects, you need to start somewhere - here.  
 categories: data technology ai
 ---
