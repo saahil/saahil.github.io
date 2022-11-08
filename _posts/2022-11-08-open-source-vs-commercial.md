@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      The Rift Between Open-source and Commercial Software Is Not Irreconcilable
-date:       2022-08-10 07:00:00
+date:       2022-11-07 07:00:00
 summary:    Can we all please just get along?  
 categories: technology software open-source product
 ---
