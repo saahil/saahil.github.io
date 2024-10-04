@@ -7,5 +7,245 @@
       On this website, I write my thoughts, tasks and everything that doesn't belong anywhere else.
     </description>
     
+        
+            <item>
+                <title>The Rift Between Open-source and Commercial Software Is Not Irreconcilable</title>
+                <link>http://localhost:4000/technology/software/open-source/product/2022/11/07/open-source-vs-commercial/</link>
+                <content:encoded>
+                    <![CDATA[
+                    <p>The most notable thing that makes the development of commercial software and FOSS different is the culture of being product focused vs. one of sharing.</p>
+
+<p>“What can we engineer that makes us the most money and sustain?” vs. “I love this thing I made, I’m sure there’s someone out there that finds it cool”.</p>
+
+<p>I’m probably being unfair with the “makes money” part (disclosure: I work on commercial software all day), but you get my drift - feel free to replace it with “gets the most users to stay” or “gets the most word out” etc.</p>
+
+<p>However, all that is not to say that one culture of development is better than the other, but I do think that acknowledging the difference is important for developers and aligned personas to appreciate different motivations better. While the former leads to coherent product experiences, the latter leads to crazy (good) experiments, creative masterworks and worthwhile alternatives to drab experiences.</p>
+
+                    ]]>
+                </content:encoded>
+                <guid isPermaLink="false">/technology/software/open-source/product/2022/11/07/open-source-vs-commercial/</guid>
+                <description>
+                    
+                    Can we all please just get along?
+                    
+                </description>
+                <pubDate>Mon, 07 Nov 2022 08:00:00 +0100</pubDate>
+                <author>Saahil Ognawala</author>
+            </item>
+        
+    
+        
+            <item>
+                <title>Data Quality Metrics for Everybody</title>
+                <link>http://localhost:4000/data/technology/ai/2022/08/17/data-quality/</link>
+                <content:encoded>
+                    <![CDATA[
+                    <p>Training the first ML model in a business app is usually driven by extensive experimentation, exploration and, what is essentially, making a lot of reasonable assumptions about what a future user’s characteristics are and how they will behave. At inference time, however, nobody should be surprised when these assumptions are violated by reality left, right and centre, and you’re left with some pretty tricky scenarios to diagnose and debug. As a starting point for these investigations, which should, ideally, involve feature importances, explanations, and so on, should be a good grip on whether the latest training data, as well as inference-time input meets a basic set of quality measures.</p>
+
+<p>This article won’t go into any business use-case specific assumptions, obviously, but the following are the bare minimum in terms of data quality metrics that you should put in place, and automate, at the end of your ETL pipelines and inference endpoints.</p>
+
+<ol>
+  <li><em>Null values</em>: Whether there are missing values in fields where there shouldn’t be any.</li>
+  <li><em>Casting of values</em>: Whether the input data flows in in a format that your casting operations can’t handle, e.g. string “1.0” can be cast into floating point, but “1 point something” cannot be.</li>
+  <li><em>Fill rates</em>: For sparse feature matrices, an overview of column fill rates is important, especially how it has evolved over the time since your model was last trained.</li>
+  <li><em>Timeliness</em>: If models are trained periodically upon availability of new ground-truth data, then a timeliness check is what allows data scientist to track whether <em>all the expected data</em> was updated, and to what degree, at the expected intervals.</li>
+  <li><em>Historical consistency</em>: As a final check, historical consistency should give an indication of whether any <em>qualitative</em> aspects of the data have changed over time, e.g. has a numerical field always been delivering integer values or have the sources been recently delivering floating point values instead - denoting certain new assumptions about the data.</li>
+</ol>
+
+                    ]]>
+                </content:encoded>
+                <guid isPermaLink="false">/data/technology/ai/2022/08/17/data-quality/</guid>
+                <description>
+                    
+                    To solve one of the biggest pains in ML projects, you need to start somewhere - here.
+                    
+                </description>
+                <pubDate>Wed, 17 Aug 2022 09:00:00 +0200</pubDate>
+                <author>Saahil Ognawala</author>
+            </item>
+        
+    
+        
+            <item>
+                <title>The AI of Your ML Products Can Also be an Attack Surface</title>
+                <link>http://localhost:4000/technology/ai/machine-learning/security/deep-learning/2022/06/29/security-in-ml/</link>
+                <content:encoded>
+                    <![CDATA[
+                    <p>Even though non-ML fields in computer science are swiftly turning into auxiliary and domain-specific machine learning research fields (e.g. look at the number of papers using or addressing machine learning in this year’s <a href="https://conf.researchr.org/program/icse-2022/program-icse-2022/Detailed-Table">International Conference for Software Engineering</a>), the core research in ML and deep learning moves so fast, that it’s impossible these days for researchers from other fields to keep track of all the new developments.
+Serious researchers, however, have <a href="https://ieeexplore.ieee.org/abstract/document/9252851">already</a> <a href="https://ieeexplore.ieee.org/abstract/document/8474192">started</a> <a href="https://ieeexplore.ieee.org/abstract/document/8617013">to look</a> into an important, but often overlooked aspect due to the speed of new developments, in machine learning systems - <em>security</em>.</p>
+
+<p>Security, in this article, is probably a catch-all for a lot of related but, theoretically speaking, distinct concepts such as robustness, safety, and adversarial-proof machine learning systems. If we use the <a href="https://arxiv.org/abs/1806.00098">artifact-based approach</a> to software engineering, security for machine learning systems should focus on these main artifacts -</p>
+
+<ol>
+  <li>Training data</li>
+  <li>Trained models</li>
+  <li>Inference endpoints or APIs</li>
+</ol>
+
+<p><strong>Training data</strong>, especially when sourced from ELT pipelines and automatically labeled, can be the first source of poisoning if, either meaningful data quality metrics are not set-up and visible (more on this in a later post), or if active-learning is set up where adversarial edge-case inputs are added to the training datasets without correcting the labels first.</p>
+
+<p><strong>Trained models</strong> can further add to the attack surface of an ML-system when it is not updated over the course of business use-case serving, and they <em>drift</em> due to the initial assumptions about the independent variables or problem statements not being valid anymore. Moreover, it can be argued that deep models whose outputs cannot be sufficiently <em>explained</em>, can be hard to debug and are a compliance and security liability, in themselves.</p>
+
+<p><strong>Inference endpoints</strong>, typically in the form of Rest or GraphQL APIs, may, in addition to being vulnerable to common software vulnerabilities, also be susceptible to being abused by, e.g. training proxy models by attackers or inferring on adversarial inputs.</p>
+
+                    ]]>
+                </content:encoded>
+                <guid isPermaLink="false">/technology/ai/machine-learning/security/deep-learning/2022/06/29/security-in-ml/</guid>
+                <description>
+                    
+                    Time to think seriously about security in machine/deep learning
+                    
+                </description>
+                <pubDate>Wed, 29 Jun 2022 13:00:00 +0200</pubDate>
+                <author>Saahil Ognawala</author>
+            </item>
+        
+    
+        
+            <item>
+                <title>Who are our Review Meetings for?</title>
+                <link>http://localhost:4000/organization/2022/03/22/review-meetings/</link>
+                <content:encoded>
+                    <![CDATA[
+                    <p>Upcoming</p>
+
+                    ]]>
+                </content:encoded>
+                <guid isPermaLink="false">/organization/2022/03/22/review-meetings/</guid>
+                <description>
+                    
+                    An Ode to Pragmatic Scrum
+                    
+                </description>
+                <pubDate>Tue, 22 Mar 2022 08:00:00 +0100</pubDate>
+                <author>Saahil Ognawala</author>
+            </item>
+        
+    
+        
+            <item>
+                <title>Most Data Fabrics are Made Of Lead, not Linen</title>
+                <link>http://localhost:4000/data/technology/ai/2022/03/08/data-fabric/</link>
+                <content:encoded>
+                    <![CDATA[
+                    <p>Gartner defines Data Fabric as</p>
+<blockquote>
+  <p>“a design concept that serves as an integrated layer (fabric) of data and connecting processes”</p>
+
+  <p>– <cite><a href="https://www.gartner.com/smarterwithgartner/data-fabric-architecture-is-key-to-modernizing-data-management-and-integration">Gartner</a></cite></p>
+</blockquote>
+
+<p>It even places itself as a sibling to the data virtualization idea - that proposes a “logical” data layer on top of disparate sources, where data resides in varying formats. 
+While most data fabric providers promise the world at the click of a button, it remains the case that most businesses need to use a semantic engine on top of their original sources, in order to run meaningful data analytics. These semantic engines are what ultimately often plug into an org’s data lake pipelines and feed into the data fabric, that is able to keep the data fresh for quick analytics.</p>
+
+<p>Creating a domain- or org-specific AI-driven data integration strategy from scratch (and it often <em>need to be</em> from scratch) sounds frightening, especially given how prolific the development in vector-search space has been recently. For D&amp;A teams, this often means top-down mandates and project charters talking about digital transformation, breaking of department-silos, machine learning capabilities, question-and-answer capabilities yada, yada, yada.</p>
+
+<p>But I’m here to tell you - you’ve got this. And the reason I say this is because, unlike what the hype tries to make you believe, most data integration layers are built using domain-specific, time-consuming and <em>heavy</em> transformations to even bring their original sources to a state that they can index it in a Lucene-based text search engine. And while that might not seem impressive if you’re on data management LinkedIn too much, it is enormous when it comes to solving your organization’s specific needs and maybe even create new business models.</p>
+
+                    ]]>
+                </content:encoded>
+                <guid isPermaLink="false">/data/technology/ai/2022/03/08/data-fabric/</guid>
+                <description>
+                    
+                    Don't let AI-experts scare you out of implementing data integration in your org
+                    
+                </description>
+                <pubDate>Tue, 08 Mar 2022 08:00:00 +0100</pubDate>
+                <author>Saahil Ognawala</author>
+            </item>
+        
+    
+        
+            <item>
+                <title>Why Aren't Data Behemoths Crushing It Harder?</title>
+                <link>http://localhost:4000/technology/data/2022/02/22/digitalization-talking-data/</link>
+                <content:encoded>
+                    <![CDATA[
+                    <p>While the ten oldest newspapers still in circulation <a href="https://en.wikipedia.org/wiki/List_of_the_oldest_newspapers">almost exclusively</a> began in Europe, none of these make it to the list of top newspapers by circulation <a href="https://en.wikipedia.org/wiki/List_of_newspapers_by_circulation">today</a>. An analogous comparison can be made for the oldest banks and insurance companies in the world too - when compared by their total assets or loss ratios, respectively. 
+For most industry veterans, it is not for a lack of digitalization schemes that they haven’t been able to conquer modern markets completely, but - and I’m obviously biting off a lot more than I can chew - what that digitalization entails.</p>
+
+<p>It isn’t enough that historical data is digitalized and suitably archived - what matters much more is whether the data is <em>activated</em>. 
+Activated data is fresh (despite being old), malleable, and <a href="https://saahil.github.io/technology/philosophy/data/2022/02/10/metaphors">vocal</a>.
+Activated data knows what it is.</p>
+
+<p>Semantic web is already a magnificent achievement, in terms of categorizing and standardizing data on the internet. Domain knowledge graphs can even further build upon the semantic web idea to <em>activate</em> data, and enable organizations to make decisions and generate value.</p>
+
+                    ]]>
+                </content:encoded>
+                <guid isPermaLink="false">/technology/data/2022/02/22/digitalization-talking-data/</guid>
+                <description>
+                    
+                    Digitalization is more than document scans.
+                    
+                </description>
+                <pubDate>Tue, 22 Feb 2022 08:00:00 +0100</pubDate>
+                <author>Saahil Ognawala</author>
+            </item>
+        
+    
+        
+            <item>
+                <title>Metaphors in Technology</title>
+                <link>http://localhost:4000/technology/philosophy/data/2022/02/10/metaphors/</link>
+                <content:encoded>
+                    <![CDATA[
+                    <p>Working closely with semantic web technologies every day, a common refrain we hear is “Talk to your data”. Talk TO your data? Kind of like talking to a wall, then? Talking to your data, much like talking to a wall, undoubtedly reflects a desperate and frustrating attempt that, unless <em>data talks back</em>, is ultimately futile. Hopefully, your data won’t just talk back, but <em>sing</em>!</p>
+
+<p>For a discipline whose fundamental building tools are (programming) languages, we, software engineers and statisticians, are notoriously bad at putting metaphors to work - if for nothing else, then to tell better stories with and about (not TO) our products.</p>
+
+                    ]]>
+                </content:encoded>
+                <guid isPermaLink="false">/technology/philosophy/data/2022/02/10/metaphors/</guid>
+                <description>
+                    
+                    In a rush to be impressive, it is easy to be shallow
+                    
+                </description>
+                <pubDate>Thu, 10 Feb 2022 08:25:00 +0100</pubDate>
+                <author>Saahil Ognawala</author>
+            </item>
+        
+    
+        
+            <item>
+                <title>Innovations and Innovations</title>
+                <link>http://localhost:4000/technology/2022/02/04/innovation-types/</link>
+                <content:encoded>
+                    <![CDATA[
+                    <p>Here’s a interesting paraphrased quote about types of innovation, from a book I’ve been reading this week</p>
+
+<blockquote>
+  <p>“Steam engines increased global productivity by many orders of magnitude…(while)…1970s saw a decline in American national productivity, seemingly reflected in the kind of innovations such as replacing window room air-conditioners with central building air-conditioners.”</p>
+
+  <p>– <cite><a href="https://www.goodreads.com/book/show/23316526-the-second-machine-age">The Second Machine Age: Work, Progress, and Prosperity in a Time of Brilliant Technologies</a>, <em>Andrew McAfee and Erik Brynjolfsson</em> </cite></p>
+</blockquote>
+
+<p>The quote kept me up a while trying to think of similar examples</p>
+
+<blockquote>
+  <p>“An innovation like eBay, not Facebook”</p>
+</blockquote>
+
+<blockquote>
+  <p>“An innovation like lamp shades, not Nest”</p>
+</blockquote>
+
+<blockquote>
+  <p>…</p>
+</blockquote>
+
+                    ]]>
+                </content:encoded>
+                <guid isPermaLink="false">/technology/2022/02/04/innovation-types/</guid>
+                <description>
+                    
+                    A commentary lifted from The Second Machine Age
+                    
+                </description>
+                <pubDate>Fri, 04 Feb 2022 09:00:00 +0100</pubDate>
+                <author>Saahil Ognawala</author>
+            </item>
+        
+    
   </channel>
 </rss>
