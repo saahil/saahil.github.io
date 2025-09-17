@@ -1,0 +1,280 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>LLM Inference Economics — Full Breakdown + Free Tier + API Business (Sept 2025)</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif; margin: 0; color: #111; background: #fafbfc; }
+    header { background: #0f172a; color: #fff; padding: 28px 24px; }
+    header h1 { margin: 0 0 8px 0; font-size: 28px; }
+    header p { margin: 0; opacity: 0.9; }
+    .wrap { max-width: 1180px; margin: 0 auto; padding: 24px; }
+    .grid { display: grid; gap: 16px; grid-template-columns: repeat(12, 1fr); }
+    .card { background: #fff; border-radius: 14px; box-shadow: 0 6px 24px rgba(16,24,40,.06); padding: 16px 18px; }
+    .pill { display: inline-block; font-weight: 700; letter-spacing: .02em; background:#eef2ff; color:#3730a3; padding:6px 10px; border-radius:999px; font-size:12px; }
+    h2 { font-size: 22px; margin: 8px 0 6px; }
+    h3 { font-size: 18px; margin: 8px 0; }
+    .nytimes { display:flex; gap:12px; align-items:center; flex-wrap: wrap; }
+    .nybox { flex:1 1 200px; background:#0b1220; color:#fff; border-radius: 12px; padding: 12px 14px; min-width: 200px; }
+    .nybox .lbl { font-size: 11px; text-transform: uppercase; letter-spacing: .12em; opacity:.7 }
+    .nybox .val { font-weight:800; font-size: 20px; margin-top:6px }
+    .section { margin-top: 28px; }
+    .infobox { background:#f8fafc; border: 1px dashed #e2e8f0; border-radius: 12px; padding: 10px 12px; }
+    .table { width:100%; border-collapse: collapse; }
+    .table th, .table td { padding: 8px 10px; border-bottom: 1px solid #e2e8f0; }
+    .right { text-align:right; }
+    .tiny { font-size:12px; color:#64748b; line-height:1.35 }
+    .ok { color:#065f46; font-weight:700 }
+    .bad { color:#b91c1c; font-weight:700 }
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <h1>Inference Economics for Open AI and Anthropic — Full Cost & Income Breakdown (Free Tier + API Business)</h1>
+    <p>A detailed cost model, paid+free chat and API P&L (users/traffic & per‑million margins).</p>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- TOP SNAPSHOT -->
+  <div class="card">
+    <div class="nytimes">
+      <div class="nybox">
+        <div class="lbl">$ per 1M tokens</div>
+        <div class="val">$4.22–$11.32</div>
+        <div class="tiny">Optimized floor → Baseline ceiling (H100; DeepSeek‑V3.1‑class). <sup><a href="https://www.nvidia.com/en-us/data-center/h100/">NVIDIA</a>, <a href="https://www.nextplatform.com/2025/01/06/deepseek-ai-pushes-the-ml-envelope-with-67b-parameter-moe/">NextPlatform</a></sup></div>
+      </div>
+      <div class="nybox">
+        <div class="lbl">H100 throughput (t/s)</div>
+        <div class="val">45 → 90</div>
+        <div class="tiny">fp16 bound → fp8 + FlashAttention‑2 + vLLM batching <sup><a href="https://arxiv.org/abs/2307.08691">FA‑2</a>, <a href="https://docs.vllm.ai/en/v0.4.3/">vLLM</a>, <a href="https://github.com/vasudevgupta7/vllm-deepseek-v3-bench#benchmarks">bench</a></sup></div>
+      </div>
+      <div class="nybox">
+        <div class="lbl">ChatGPT usage anchors</div>
+        <div class="val">190.6M DAU · 2.5B prompts/day</div>
+        <div class="tiny"><sup><a href="https://sqmagazine.co.uk/openai-vs-anthropic-statistics/">SQ Magazine</a>, <a href="https://techcrunch.com/2025/07/21/chatgpt-users-send-2-5-billion-prompts-a-day/">TechCrunch</a></sup></div>
+      </div>
+      <div class="nybox">
+        <div class="lbl">Free token share (OpenAI)</div>
+        <div class="val">84.8%</div>
+        <div class="tiny">Derived from 1k tokens/prompt and paid usage model (20/80).</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION A: Per‑GPU cost & $/M -->
+  <div class="section card">
+    <span class="pill">A. Cost Model</span>
+    <h2>Per‑GPU monthly cost and $/1M tokens (component breakdown)</h2>
+    <div class="infobox">
+      <strong>Infographic:</strong> H100 monthly TCO (mid): $1,031.85 = amort $833.33 + power $50.40 + cooling $15.12 + colocation $133.00 <sup><a href="https://brightlio.com/colocation-pricing/">Brightlio</a>, <a href="https://www.cbre.com/insights/reports/global-data-center-trends-2025">CBRE</a></sup>. 
+      $/M spans baseline $7.45–$11.32 and optimized $4.22–$5.13.
+    </div>
+    <div class="grid">
+      <div class="card" style="grid-column: span 6;">
+        <h3>Per‑GPU Monthly Cost (low / mid / high)</h3>
+        <table class="table">
+          <tr><th>Component</th><th class="right">Low</th><th class="right">Mid</th><th class="right">High</th></tr>
+          <tr><td>Amortization</td><td class="right">$694.44</td><td class="right">$833.33</td><td class="right">$1,111.11</td></tr>
+          <tr><td>Power</td><td class="right">$50.40</td><td class="right">$50.40</td><td class="right">$50.40</td></tr>
+          <tr><td>Cooling (+30%)</td><td class="right">$15.12</td><td class="right">$15.12</td><td class="right">$15.12</td></tr>
+          <tr><td>Colocation</td><td class="right">$114.41</td><td class="right">$133.00</td><td class="right">$152.11</td></tr>
+          <tr><th>Total</th><th class="right">$874.37</th><th class="right">$1,031.85</th><th class="right">$1,328.74</th></tr>
+        </table>
+      </div>
+      <div class="card" style="grid-column: span 6;">
+        <h3>$ per 1M tokens — ranges</h3>
+        <table class="table">
+          <tr><th></th><th class="right">Min</th><th class="right">Mid</th><th class="right">Max</th></tr>
+          <tr><td>Baseline (~45 t/s)</td><td class="right">$7.45</td><td class="right">$8.79</td><td class="right">$11.32</td></tr>
+          <tr><td>Optimized (~90 t/s)</td><td class="right">$4.22</td><td class="right">$4.42</td><td class="right">$5.13</td></tr>
+        </table>
+        <p class="tiny">Per‑million component contributions (mid): Baseline amort $7.10, power $0.43, cooling $0.13, colo $1.13. Optimized amort $3.57, power $0.22, cooling $0.06, colo $0.57.</p>
+        <canvas id="costStack"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION B: OpenAI Chat P&L -->
+  <div class="section card">
+    <span class="pill">B. OpenAI Chat P&L</span>
+    <h2>Paid vs free usage — costs and revenue</h2>
+    <div class="infobox">
+      <strong>Infographic:</strong> DAU ≈ 190.6M (<a href="https://sqmagazine.co.uk/openai-vs-anthropic-statistics/">source</a>), prompts/day ≈ 2.5B (<a href="https://techcrunch.com/2025/07/21/chatgpt-users-send-2-5-billion-prompts-a-day/">source</a>), 10% paid ⇒ 19.1M paid, 171.5M free. Tokens/prompt = 1,000. Paid usage: 20% heavy (80/day) & 80% avg (5/day).
+    </div>
+    <h3>Token volumes</h3>
+    <table class="table">
+      <tr><th></th><th class="right">Tokens / month</th></tr>
+      <tr><td>Paid users</td><td class="right">11.4T</td></tr>
+      <tr><td>Free users</td><td class="right">63.6T</td></tr>
+      <tr><th>Total</th><th class="right">75.0T</th></tr>
+    </table>
+    <h3>Costs — full range</h3>
+    <table class="table">
+      <tr><th></th><th class="right">Baseline min</th><th class="right">Baseline mid</th><th class="right">Baseline max</th><th class="right">Opt min</th><th class="right">Opt mid</th><th class="right">Opt max</th></tr>
+      <tr><td>Paid cost</td>
+        <td class="right">$85,216,271</td>
+        <td class="right">$100,564,346</td>
+        <td class="right">$129,499,006</td>
+        <td class="right">$48,222,045</td>
+        <td class="right">$50,584,168</td>
+        <td class="right">$58,624,550</td></tr>
+      <tr><td>Free cost</td>
+        <td class="right">$473,652,242</td>
+        <td class="right">$558,960,484</td>
+        <td class="right">$719,786,185</td>
+        <td class="right">$268,029,562</td>
+        <td class="right">$281,158,802</td>
+        <td class="right">$325,849,151</td></tr>
+      <tr><th>Total cost</th>
+        <th class="right">$558,868,512</th>
+        <th class="right">$659,524,830</th>
+        <th class="right">$849,285,191</th>
+        <th class="right">$316,251,608</th>
+        <th class="right">$331,742,970</th>
+        <th class="right">$384,473,701</th></tr>
+    </table>
+    <h3>Revenue & gross profit</h3>
+    <table class="table">
+      <tr><th></th><th class="right">Value</th></tr>
+      <tr><td>Revenue ($20 × paid users)</td><td class="right">$381,200,000</td></tr>
+      <tr><td>Gross profit (baseline mid)</td><td class="right"><span class='bad'>$-278,324,830</span></td></tr>
+      <tr><td>Gross profit (optimized mid)</td><td class="right"><span class='ok'>$49,457,030</span></td></tr>
+      <tr><td>Break‑even sub price (baseline mid)</td><td class="right">$34.60/mo</td></tr>
+      <tr><td>Break‑even sub price (optimized mid)</td><td class="right">$17.41/mo</td></tr>
+    </table>
+    <canvas id="openaiStack"></canvas>
+  </div>
+
+  <!-- SECTION C: Anthropic Chat P&L -->
+  <div class="section card">
+    <span class="pill">C. Anthropic Chat P&L</span>
+    <h2>Paid vs free usage — scaled costs and revenue</h2>
+    <div class="infobox">
+      <strong>Infographic:</strong> Claude MAU mid ≈ 24.4M (<a href="https://analyzify.com/statsup/anthropic">StatsUp</a>, <a href="https://sqmagazine.co.uk/claude-ai-statistics/">SQ</a>). 10% paid ⇒ 2.4M paid, 22.0M free. Free:paid token ratio borrowed from ChatGPT derivation = 5.56:1.
+    </div>
+    <h3>Token volumes (est.)</h3>
+    <table class="table">
+      <tr><th></th><th class="right">Tokens / month</th></tr>
+      <tr><td>Paid users</td><td class="right">1.5T</td></tr>
+      <tr><td>Free users (est.)</td><td class="right">8.2T</td></tr>
+      <tr><th>Total</th><th class="right">9.6T</th></tr>
+    </table>
+    <h3>Costs & revenue (optimized mid)</h3>
+    <table class="table">
+      <tr><th></th><th class="right">Value</th></tr>
+      <tr><td>Paid cost</td><td class="right">$6,488,892</td></tr>
+      <tr><td>Free cost (est.)</td><td class="right">$36,066,803</td></tr>
+      <tr><th>Total cost</th><th class="right">$42,555,696</th></tr>
+      <tr><td>Revenue ($20 × paid users)</td><td class="right">$48,900,000</td></tr>
+      <tr><td>Gross profit (opt‑mid)</td><td class="right"><span class='ok'>$6,344,304</span></td></tr>
+    </table>
+    <canvas id="anthropicStack"></canvas>
+  </div>
+
+  <!-- SECTION D: API Business -->
+  <div class="section card">
+    <span class="pill">D. API Business</span>
+    <h2>Users, traffic, and per‑million token margins</h2>
+    <div class="infobox">
+      <strong>OpenAI:</strong> "<em>Three million developers build with OpenAI</em>" (<a href="https://openai.com/api/">official</a>); reported <strong>~2.2B API requests/day</strong> (<a href="https://sqmagazine.co.uk/openai-statistics/">SQ Magazine</a>).<br/>
+      <strong>Anthropic:</strong> reported <strong>~25B API calls/month</strong> (≈ 833,333,333/day) (<a href="https://sqmagazine.co.uk/claude-ai-statistics/">SQ Magazine</a>). Pricing: <a href="https://www.anthropic.com/pricing#api">official</a>. OpenAI pricing: <a href="https://openai.com/api/pricing/">official</a>.
+    </div>
+    <h3>API “DAU” (active orgs/keys per day) — scenarios</h3>
+    <table class="table">
+      <tr><th>Scenario</th><th class="right">Per‑org calls/day</th><th class="right">OpenAI API DAU (orgs)</th><th class="right">Anthropic API DAU (orgs)</th></tr>
+<tr><td>Small apps</td><td class='right'>1,000</td><td class='right'>2,200,000</td><td class='right'>833,333</td></tr>
+<tr><td>Mid apps</td><td class='right'>10,000</td><td class='right'>220,000</td><td class='right'>83,333</td></tr>
+<tr><td>Large apps</td><td class='right'>100,000</td><td class='right'>22,000</td><td class='right'>8,333</td></tr>
+
+    </table>
+    <p class="tiny">These are org‑level DAU estimates, not end users. A mid‑case of ~10k calls/org/day ⇒ ~220k active orgs/day at OpenAI, consistent with a subset of ~3M total developers grouped into teams/apps.</p>
+
+    <h3>Per‑million pricing → margins</h3>
+    <p>Blended price per 1M <em>total</em> tokens: <code>P = p_in·(1−s_out) + p_out·s_out</code> for output share <code>s_out</code>. We show 50/50 and output‑heavy 30/70 mixes. Margins subtract our serving COGS $/M (H100 TCO): best‑case (optimized‑min) → worst‑case (baseline‑max).</p>
+    <table class="table">
+      <tr><th>Model & mix</th><th class="right">Blended price / 1M</th><th class="right">Margin band ($/M)</th><th class="right">Margin band (%)</th></tr>
+      <tr><td>OpenAI GPT‑5 — 50/50 in:out</td><td class='right'>$5.62</td><td class='right'>$1.41 → $-5.70</td><td class='right'>25% → -101%</td></tr><tr><td>OpenAI GPT‑5 — 30/70 in:out</td><td class='right'>$7.38</td><td class='right'>$3.16 → $-3.95</td><td class='right'>43% → -54%</td></tr><tr><td>OpenAI GPT‑4.1 — 50/50 in:out</td><td class='right'>$7.50</td><td class='right'>$3.28 → $-3.82</td><td class='right'>44% → -51%</td></tr><tr><td>OpenAI GPT‑4.1 — 30/70 in:out</td><td class='right'>$9.30</td><td class='right'>$5.08 → $-2.02</td><td class='right'>55% → -22%</td></tr><tr><td>Anthropic Claude Sonnet 4 (≤200k) — 50/50 in:out</td><td class='right'>$9.00</td><td class='right'>$4.78 → $-2.32</td><td class='right'>53% → -26%</td></tr><tr><td>Anthropic Claude Sonnet 4 (≤200k) — 30/70 in:out</td><td class='right'>$11.40</td><td class='right'>$7.18 → $0.08</td><td class='right'>63% → 1%</td></tr>
+    </table>
+  </div>
+
+  <!-- SECTION E: Verdict -->
+  <div class="section card">
+    <span class="pill">E. Verdict</span>
+    <h2>Can $20 paid subs subsidize free chat usage?</h2>
+    <ul>
+      <li><strong>OpenAI (ChatGPT):</strong> Gross profit (opt‑mid) = $49,457,030 ⇒ <strong>profit</strong> after free is included. Break‑even ≈ $17.41/mo.</li>
+      <li><strong>Anthropic (Claude):</strong> Gross profit (opt‑mid) = $6,344,304 ⇒ <strong>profit</strong> with scaled free costs.</li>
+      <li><strong>API:</strong> Per‑million unit margins are generally positive at list prices vs our cost range, suggesting API can cross‑subsidize chat if needed.</li>
+    </ul>
+    <p class="tiny">Figures are serving COGS only (GPUs, power, cooling, colocation); exclude staff, R&amp;D, networking/egress, training amortization, idle capacity.</p>
+  </div>
+
+  <!-- Charts -->
+  <script>
+    // Cost component stack per 1M (mid)
+    new Chart(document.getElementById('costStack').getContext('2d'), {
+      type: 'bar',
+      data: {
+        labels: ['Baseline (mid)', 'Optimized (mid)'],
+        datasets: [
+          { label: 'Amortization', data: [7.1018, 3.5722] },
+          { label: 'Power', data: [0.4295, 0.2160] },
+          { label: 'Cooling', data: [0.1289, 0.0648] },
+          { label: 'Colocation', data: [1.1335, 0.5701] }
+        ]
+      },
+      options: { responsive: true, plugins: { legend: { position:'bottom' } }, scales: { x: { stacked:true }, y: { stacked:true, beginAtZero:true } } }
+    });
+
+    // OpenAI paid vs free cost vs revenue
+    new Chart(document.getElementById('openaiStack').getContext('2d'), {
+      type: 'bar',
+      data: {
+        labels: ['OpenAI (opt-mid)'],
+        datasets: [
+          { label: 'Revenue', data: [381200000.00] },
+          { label: 'Paid cost', data: [50584168.04] },
+          { label: 'Free cost', data: [281158801.78] }
+        ]
+      },
+      options: { responsive: true, plugins: { legend: { position:'bottom' } }, scales: { x: { stacked:false }, y: { beginAtZero:true } } }
+    });
+
+    // Anthropic paid vs free cost vs revenue
+    new Chart(document.getElementById('anthropicStack').getContext('2d'), {
+      type: 'bar',
+      data: {
+        labels: ['Anthropic (opt-mid)'],
+        datasets: [
+          { label: 'Revenue', data: [48900000.00] },
+          { label: 'Paid cost', data: [6488892.49] },
+          { label: 'Free cost', data: [36066803.27] }
+        ]
+      },
+      options: { responsive: true, plugins: { legend: { position:'bottom' } }, scales: { x: { stacked:false }, y: { beginAtZero:true } } }
+    });
+  </script>
+
+  <!-- References -->
+  <div class="section card">
+    <span class="pill">References</span>
+    <ol class="tiny">
+      <li><a href="https://huggingface.co/deepseek-ai/DeepSeek-V3.1">DeepSeek‑V3.1 (Hugging Face)</a>; <a href="https://www.nextplatform.com/2025/01/06/deepseek-ai-pushes-the-ml-envelope-with-67b-parameter-moe/">NextPlatform: active params ≈37B</a></li>
+      <li><a href="https://www.nvidia.com/en-us/data-center/h100/">NVIDIA H100</a>; <a href="https://arxiv.org/abs/2307.08691">FlashAttention‑2</a>; <a href="https://docs.vllm.ai/en/v0.4.3/">vLLM docs</a>; <a href="https://github.com/vasudevgupta7/vllm-deepseek-v3-bench#benchmarks">DeepSeek V3 H100 bench</a>; <a href="https://lmsys.org/blog/2025-05-05-large-scale-ep/">SGLang</a>; <a href="https://arxiv.org/pdf/2309.06180">PagedAttention</a></li>
+      <li><a href="https://sqmagazine.co.uk/openai-vs-anthropic-statistics/">SQ Magazine: ChatGPT DAU/WAU</a>; <a href="https://techcrunch.com/2025/07/21/chatgpt-users-send-2-5-billion-prompts-a-day/">TechCrunch: 2.5B prompts/day</a></li>
+      <li><a href="https://analyzify.com/statsup/anthropic">StatsUp: Claude MAU</a>; <a href="https://sqmagazine.co.uk/claude-ai-statistics/">SQ Magazine: Claude stats</a></li>
+      <li><a href="https://brightlio.com/colocation-pricing/">Brightlio: colocation pricing</a>; <a href="https://www.cbre.com/insights/reports/global-data-center-trends-2025">CBRE: Data center trends</a></li>
+      <li><a href="https://www.anthropic.com/pricing#api">Anthropic pricing</a>; <a href="https://openai.com/api/pricing/">OpenAI pricing</a>; <a href="https://openai.com/api/">OpenAI API overview</a>; <a href="https://sqmagazine.co.uk/openai-statistics/">OpenAI API requests/day</a>; <a href="https://sqmagazine.co.uk/claude-ai-statistics/">Claude API calls/month</a></li>
+    </ol>
+  </div>
+
+</div>
+</body>
+</html>

@@ -7,6 +7,131 @@
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>The Great AI Arbitrage</title>
+        <description>&lt;p&gt;The recent &lt;a href=&quot;https://nanda.media.mit.edu/ai_report_2025.pdf&quot;&gt;MIT NANDA study&lt;/a&gt; (State of AI in Business 2025) on the business adoption of generative AI has been eye-opening for many, including especially those who believed that the ever-improving model quality from leading labs meant that they were ripe for disrupting cognitive functions in age-old industrial processes. The study showed, amongst other things, that this was by far not the case, and that almost 95% of the generative AI use-case implementations didn’t end up in sustained and profitable usage in companies.&lt;/p&gt;
+
+&lt;p&gt;While there’s a lot to unpack and opine subjectively on the study (especially considering that the sample used in the study is only 52 companies), I’m going to use this single finding that I find the most interesting, as a jumping-off point to this series of articles&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;em&gt;“While only 40% of companies say they purchased an official LLM subscription, workers from over 90% of the companies we surveyed reported regular use of personal AI tools for work tasks.” State of AI in Business 2025, MIT NANDA&lt;/em&gt;&lt;/p&gt;
+
+&lt;/blockquote&gt;
+
+&lt;p&gt;That should not be surprising to any of us who are outside research settings. Anyone who has worked in a company larger than 20 employees has, at some point, run into this scenario - there’s a new LLM or coding agent in town, you’d like to put a credit card on file to start and feel around the vibe of the tool before making a decision to switch, but getting your request approved by management is so cumbersome that you end up using your personal CC for trying out. You might defer the official request until later, if you even expect the request to eventually be cleared by the CISO - who may refuse the eventual request due to data provenance reasons.&lt;/p&gt;
+
+&lt;p&gt;But what &lt;em&gt;is&lt;/em&gt; remarkable about this finding is the stark contrast it puts against the &lt;em&gt;official&lt;/em&gt; initiatives that enterprises undertake with generative AI in general, and LLMs in particular. In addition to the 40% figure of companies purchasing official licensing, there’s of course the famous &lt;em&gt;5%&lt;/em&gt; figure that refers to companies that report profitable and sustained production implementations with the technology.&lt;/p&gt;
+
+&lt;p&gt;In this article, we will use the MIT study itself, but with a quantitative breakdown, to answer the question&lt;/p&gt;
+
+&lt;aside&gt;
+💡
+
+Why can’t organizations capture the value from generative AI that individual employees so effortlessly access?
+
+&lt;/aside&gt;
+
+&lt;p&gt;In particular, we will examine three critical aspects related to enterprise generative AI adoption -&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Why the inference economics actually favour model providers at the current pricing already?&lt;/li&gt;
+  &lt;li&gt;Where the real adoption of generative AI is happening?&lt;/li&gt;
+  &lt;li&gt;What capability gaps exist that explain the divide between individual and enterprise-level AI adoption?&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;In the follow-up articles in the series, we will then go on to deduce how enterprises can assess whether their planned generative AI POCs are likely to succeed or fail, based on the use-case categorization of the MIT Nanda study.&lt;/p&gt;
+
+&lt;h2 id=&quot;the-silicon-floor&quot;&gt;The Silicon Floor&lt;/h2&gt;
+
+&lt;p&gt;When we distinguish between “consumer” and “enterprise” use-cases of LLMs, the temptation is to compare ChatGPT-like applications to the early days of Uber and Zomato - that the main objective &lt;em&gt;must&lt;/em&gt; be to capture market segments at all (VC’s) costs, avoid commoditization and only then aim for profitability. However, one only needs to work through the economics of LLM APIs to see that what we’re witnessing today is anything but comparable to the gig-economy days. In this section, we will quantitatively show that model providers are, in fact, well on their path to profitability on their consumer products, if not already there.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/training_summary.png&quot; alt=&quot;The capex view of Llama3’s training costs. For full analysis can be found [here](/files/llm_training_economics.html). &quot; /&gt;
+&lt;em&gt;The capex view of Llama3’s training costs. For full analysis can be found &lt;a href=&quot;/files/llm_training_economics.html&quot;&gt;here&lt;/a&gt;.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;While training costs for LLMs are substantial - our analysis shows Llama 3 herd of models required between &lt;a href=&quot;/files/llm_training_economics.html&quot;&gt;$197M-$748M in total development costs&lt;/a&gt; when including experimental runs, infrastructure, and electricity costs - these represent one-time expenses. For API providers, the inference costs far outweigh training costs. This has been corroborated directly by several credible sources, such as Yann LeCun who &lt;a href=&quot;https://www.businessinsider.com/meta-yann-lecun-ai-scientist-deepseek-markets-reaction-inference-2025-1?utm_source=chatgpt.com&quot;&gt;said&lt;/a&gt; in context of the erstwhile media frenzy over Deepseek&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;em&gt;“The huge sums of money going into US AI companies were needed primarily for inference, not training AI. Most of the infrastructure cost for AI is for inference: serving AI assistants to billions of people.” Yann LeCun, Chief AI Scientist at Meta&lt;/em&gt;&lt;/p&gt;
+
+&lt;/blockquote&gt;
+
+&lt;p&gt;With this in mind, in the rest of this section, we’ll just go ahead and assume that the cost of inference (runtime serving costs - GPU rental or own-cost amortization, power, cooling, datacenter cost) is the main driver for deciding operating margins for model providers, such as OpenAI and Anthropic, and not training. This may, of course, not hold true for business models other than model-as-an-API, but we’ll come to alternative business models for foundational companies at a later point.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/paid-vs-full-infographic-inference.png&quot; alt=&quot;OpenAI’s estimated profit margins on ChatGPT consumer app alone. The costs are for COGS only. For details refer to the [full breakdown](/files/llm_inference_economics_full_plus_api_merged.html). &quot; /&gt;
+&lt;em&gt;OpenAI’s estimated profit margins on ChatGPT consumer app alone. The costs are for COGS only. For details refer to the &lt;a href=&quot;/files/llm_inference_economics_full_plus_api_merged.html&quot;&gt;full breakdown&lt;/a&gt;.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;As for the economics of LLM inference, a definitive answer as to the model providers’ economics is hard to come by. Various sources claim different numbers on total cost of ownership of models and serving infrastructure, and the major sources of contention are&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Whether there are enough paid monthly subscribers to cover the inference cost for free users&lt;/li&gt;
+  &lt;li&gt;Whether there are enough &lt;em&gt;low usage&lt;/em&gt; paid subscribers subsidizing the costs for heavy users&lt;/li&gt;
+  &lt;li&gt;Whether there are enough consumption-based API users (e.g. coding agents) where the costs and earnings are easier to attribute than monthly subscriptions.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Our &lt;a href=&quot;/files/llm_inference_economics_full_plus_api_merged.html&quot;&gt;own calculations&lt;/a&gt;, using Deepseek-v3.1 MoE (37B active params) as proxy for SOTA closed models, paint an ambiguous picture about potential revenues and margins for top model providers such as OpenAI and Anthropic. Assuming a &lt;a href=&quot;https://sqmagazine.co.uk/openai-vs-anthropic-statistics/&quot;&gt;reported&lt;/a&gt; ~190–200M DAU for ChatGPT, we estimate that OpenAI may be spending between 300 to 700M USD per month on inference for their chat app users. Assuming 10% of those DAUs are paid users, they might be earning a monthly revenue between 350 to 400M USD. This indicates that, with tailored optimization strategies per user-segment, OpenAI might either already be profitable on ChatGPT app, or close to getting there.&lt;/p&gt;
+
+&lt;p&gt;For API customers, the economics are somewhat &lt;a href=&quot;/files/llm_inference_economics_full_plus_api_merged.html&quot;&gt;different&lt;/a&gt;: developers and enterprise clients paying ~$10 per million input tokens and ~$20 per million output tokens may provide gross margins ranges between -50% to 70%, making the API business a lever for OpenAI and Anthropic’s to cross-subsidize their consumer application business, if needed.&lt;/p&gt;
+
+&lt;p&gt;A detailed breakdown of all our calculations may be seen &lt;a href=&quot;/files/llm_inference_economics_full_plus_api_merged.html&quot;&gt;here&lt;/a&gt;. Additional sources of &lt;em&gt;non-service&lt;/em&gt; revenues that we haven’t included in our analysis are the revenue share that OpenAI and Anthropic might earn on their enterprise inference deals with Azure (Azure OpenAI), AWS (Bedrock) or Google (Vertex AI Partner Models).&lt;/p&gt;
+
+&lt;p&gt;Therefore, even assuming considerable deviations in the reported usage data and model details, the economics of GA inference currently favour the market leaders in generative AI. OpenAI, Anthropic, Google Deepmind and such, for all we can observe, have not made any major moves to squeeze their margins yet, which should indicate how different these dynamics are to the gig economy days.&lt;/p&gt;
+
+&lt;h2 id=&quot;the-shadow-economy-paradox&quot;&gt;The “Shadow Economy” Paradox&lt;/h2&gt;
+
+&lt;p&gt;As we have seen above, the major foundation model providers can already provide access to generative AI technology profitably to millions of users worldwide. In fact, our calculations reveal that had it not been for the incredible demand for these model APIs, the model providers may never have been able to operate profitably, i.e. the economy of GPU utilization works out for them only due to the scale.&lt;/p&gt;
+
+&lt;p&gt;It would be fair to say that a major chunk of the daily active users of these chat-style applications are employees of the very enterprises that report little to no gains in efficiency with generative AI (more on that soon).&lt;/p&gt;
+
+&lt;p&gt;What I find remarkable about this figure is that a significant share of employees reporting productivity boost with tools such as ChatGPT are using their private subscriptions to these services, for professional purpose (the “shadow economy”).&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;em&gt;“A significant number of workers already use AI tools privately, reporting productivity gains, while their companies’ formal AI initiatives stall.” State of AI in Business 2025, MIT NANDA&lt;/em&gt;&lt;/p&gt;
+
+&lt;/blockquote&gt;
+
+&lt;p&gt;The reason this fact is remarkable is that these employees have wildly different feedback for the task-specific generative AI tooling and solutions that their own companies were developing at the time.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;em&gt;“A significant number of workers already use AI tools privately, reporting productivity gains, while their companies’ formal AI initiatives stall.” State of AI in Business 2025, MIT NANDA&lt;/em&gt;&lt;/p&gt;
+
+&lt;/blockquote&gt;
+
+&lt;p&gt;In summary, the foundation model providers are already profitable off the back of the day-to-day productivity increase of employees of the same companies, whose own custom AI tools largely suck.&lt;/p&gt;
+
+&lt;p&gt;So, why don’t these enterprises just let their employees use company credit cards for Claude, instead of sinking millions into failed custom generative AI tooling?&lt;/p&gt;
+
+&lt;h2 id=&quot;the-real-adoption-barriers&quot;&gt;The Real Adoption Barriers&lt;/h2&gt;
+
+&lt;p&gt;It should be clear to the readers that it is not due to a mismatch in the fundamental model economics, training-time or inference-time, that only 5% of the enterprises deploying generative AI pilots end up extracting regular and sustained business value out of them. The MIT study itself points to &lt;em&gt;technological&lt;/em&gt; &lt;em&gt;gaps&lt;/em&gt; that are, in fact, to blame.&lt;/p&gt;
+
+&lt;p&gt;The study assigns an overarching term to this identified gap in LLM-based applications - “The Learning Gap”. Basically, the LLMs - and precisely &lt;em&gt;not&lt;/em&gt; the chat apps - suffer from the following glaring insufficiencies that make them unsuitable to be used as trustworthy task-specific companions, experts or - in terms that we’ve all come to accept - “&lt;em&gt;copilots”&lt;/em&gt;:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;The LLMs themselves don’t learn over time from the users’ feedback.&lt;/li&gt;
+  &lt;li&gt;As a corollary to the above, the LLMs require too much context to be supplied every time, and there isn’t a straightforward and &lt;em&gt;effective&lt;/em&gt; way for the right context to be dynamically chosen based on the task-at-hand (👀 vector search).&lt;/li&gt;
+  &lt;li&gt;Even if the LLM-based workflows complete tasks without intervention &lt;em&gt;most&lt;/em&gt; of the time, they break for edge-cases and don’t learn from these failures. Since, by definition, these edge cases are more complicated to define and expect, the overall trustworthiness of the LLM-based tooling suffers as a result.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;em&gt;“Our purchased AI tool provided rigid summaries with limited customization options. With ChatGPT, I can guide the conversation and iterate until I get exactly what I need. The fundamental quality difference is noticeable, ChatGPT consistently produces better outputs, even though our vendor claims to use the same underlying technology.”&lt;/em&gt; - Corporate lawyer at a mid-sized firm quoted in &lt;em&gt;State of AI in Business in 2025, MIT NANDA&lt;/em&gt;&lt;/p&gt;
+
+&lt;/blockquote&gt;
+
+&lt;p&gt;Enterprise employees, being well-versed in current SOTA tools and models, are able to successfully augment their own job functions precisely because they don’t expect ChatGPT et al. to retain feedback, or improve over time. We could go as far as to suggest that employees &lt;em&gt;don’t&lt;/em&gt; consider AI chatbots to be replacements for &lt;em&gt;any&lt;/em&gt; level of expertise in their job functions - not even interns.&lt;/p&gt;
+
+&lt;p&gt;This is in stark contrast to ambitious enterprise generative AI pilots, whose stated aim often is to directly augment their workforce. Such pilots then, obviously, lead to total disenchantment since the technology clearly is not able to accumulate knowledge over time, retain relevant context (and, importantly, decide which context needs to be chucked away), and basically train itself on the job like a junior or associate-level employee would.&lt;/p&gt;
+
+&lt;p&gt;As it stands, SOTA LLMs don’t stand a chance at getting promoted in the next appraisal cycle.&lt;/p&gt;
+
+&lt;h2 id=&quot;the-opportunity&quot;&gt;The Opportunity&lt;/h2&gt;
+
+&lt;p&gt;So how are enterprises and startups going to respond to these key challenges (profitable TCO not being one of them) that make it difficult for generative AI initiatives to succeed? In the next articles, we will discuss some concrete failure patterns that companies regularly run into such as lost opportunity costs of fine-tuning LLMs, and applying LLMs only for low-leverage job functions. Then we will make direct suggestions based on current research and available enterprise adoption data, as to how one should prioritize use-cases that are well-suited to be augmented with capabilities that current LLMs possess.&lt;/p&gt;
+</description>
+        <pubDate>Wed, 17 Sep 2025 09:00:00 +0200</pubDate>
+        <link>http://localhost:4000/technology/data/generative-ai/llm/2025/09/17/great-ai-arbitrage/</link>
+        <guid isPermaLink="true">http://localhost:4000/technology/data/generative-ai/llm/2025/09/17/great-ai-arbitrage/</guid>
+      </item>
+    
+      <item>
         <title>The Rift Between Open-source and Commercial Software Is Not Irreconcilable</title>
         <description>&lt;p&gt;The most notable thing that makes the development of commercial software and FOSS different is the culture of being product focused vs. one of sharing.&lt;/p&gt;
 

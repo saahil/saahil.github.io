@@ -1,0 +1,74 @@
+// Notion-style callout boxes
+.callout {
+  display: flex;
+  align-items: flex-start;
+  padding: 16px;
+  margin: 16px 0;
+  border-radius: 8px;
+  background-color: #f7f8fa;
+  border-left: 4px solid #e3e5e8;
+  font-size: 0.95em;
+  
+  .callout-icon {
+    flex-shrink: 0;
+    margin-right: 12px;
+    font-size: 1.2em;
+    line-height: 1;
+  }
+  
+  .callout-content {
+    flex: 1;
+    margin: 0;
+    
+    p {
+      margin: 0;
+    }
+    
+    p:not(:last-child) {
+      margin-bottom: 8px;
+    }
+  }
+  
+  // Different callout types
+  &.info {
+    background-color: #f0f9ff;
+    border-left-color: #0ea5e9;
+    
+    .callout-icon {
+      color: #0ea5e9;
+    }
+  }
+  
+  &.warning {
+    background-color: #fffbeb;
+    border-left-color: #f59e0b;
+    
+    .callout-icon {
+      color: #f59e0b;
+    }
+  }
+  
+  &.success {
+    background-color: #f0fdf4;
+    border-left-color: #22c55e;
+    
+    .callout-icon {
+      color: #22c55e;
+    }
+  }
+  
+  &.error {
+    background-color: #fef2f2;
+    border-left-color: #ef4444;
+    
+    .callout-icon {
+      color: #ef4444;
+    }
+  }
+}
+
+// Legacy support for existing aside elements
+aside {
+  @extend .callout;
+  @extend .callout.info;
+}

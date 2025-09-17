@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>How Much Does It Cost to Train the Llama-3 “Herd”? — A grounded cost model (2025-09-16)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1"></script>
+<style>
+  :root{
+    --bg:#0b1020; --ink:#e8ecf3; --muted:#a9b3c8; --card:#151b31; --accent:#8bd3ff;
+    --red:#ff6b6b; --green:#6bffa6; --yellow:#ffd66b; --blue:#6bc2ff; --violet:#b99cff;
+    --grid:#1e2542; --ok:#b5f27a;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial}
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .wrap{max-width:1100px;margin:0 auto;padding:28px 16px 64px}
+  header.hero{display:grid;gap:16px;margin-bottom:18px}
+  header .hed{font-weight:800;font-size:clamp(26px,3.6vw,38px);letter-spacing:.2px}
+  header .dek{color:var(--muted)}
+  .grid{display:grid;gap:12px}
+  .grid.cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .grid.cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .card{background:var(--card);border:1px solid var(--grid);border-radius:16px;padding:16px}
+  .card.slim{padding:12px}
+  .kpi{display:flex;align-items:baseline;gap:8px}
+  .kpi .num{font-weight:800;font-size:clamp(22px,3.3vw,34px)}
+  .kpi .lbl{color:var(--muted)}
+  .pill{display:inline-block;border:1px solid var(--grid);border-radius:999px;padding:2px 8px;color:var(--muted);font-size:12px}
+  .subhed{font-weight:800;font-size:19px;margin:8px 0 10px}
+  .nytbar{display:grid;grid-template-columns:repeat(12,1fr);gap:6px;margin-top:6px}
+  .nytbar .seg{height:10px;border-radius:3px;background:linear-gradient(180deg,rgba(255,255,255,.18),rgba(255,255,255,.05));position:relative;overflow:hidden}
+  .nytbar .seg::after{content:'';position:absolute;inset:0;mix-blend-mode:overlay;background:repeating-linear-gradient( 90deg, rgba(255,255,255,.08) 0, rgba(255,255,255,.08) 2px, transparent 2px, transparent 6px)}
+  .note{color:var(--muted);font-size:13px}
+  .foot{font-size:13px;color:var(--muted)}
+  .badge{font-weight:700;font-size:12px;letter-spacing:.2px;text-transform:uppercase}
+  .ok{color:var(--ok)}
+  .warn{color:var(--yellow)}
+  .err{color:var(--red)}
+  .callout{background:linear-gradient(180deg,rgba(139,211,255,.09),rgba(139,211,255,.03));border:1px solid #223154;border-radius:14px;padding:10px 12px}
+  .tiny{font-size:12px;color:var(--muted)}
+  .mt8{margin-top:8px}.mt12{margin-top:12px}.mt16{margin-top:16px}.mt24{margin-top:24px}.mt32{margin-top:32px}
+  .mb8{margin-bottom:8px}.mb16{margin-bottom:16px}.mb24{margin-bottom:24px}
+  sup a{color:var(--muted)}
+  code.snip{background:#101427;border:1px solid var(--grid);padding:2px 6px;border-radius:8px}
+  hr{border:0;border-top:1px solid var(--grid);margin:28px 0}
+  .table{width:100%;border-collapse:collapse}
+  .table th,.table td{border-bottom:1px dashed var(--grid);padding:8px 6px;text-align:left}
+  .legend{display:flex;gap:12px;flex-wrap:wrap}
+  .dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:6px}
+  .sr{position:absolute;left:-9999px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- TOP SUMMARY — “election night” vibe -->
+  <header class="hero card">
+    <div class="hed">Cost to train the full Llama-3 “herd” today</div>
+    <p class="dek">
+      We ground estimates in Meta’s public disclosures (two 24k-H100 clusters and a 54-day 405B run) and primary cloud/H100 specs,
+      then layer electricity, data preparation, and overhead.
+    </p>
+
+    <!-- election-night style scoreboard -->
+    <div class="grid cols-3 mt8">
+      <div class="card slim">
+        <div class="kpi">
+          <div class="num">~38.0M</div><div class="lbl">H100-GPU-hours (herd total)</div>
+        </div>
+        <div class="nytbar" aria-hidden="true" title="Share of GPU-hours by model">
+          <div class="seg" style="grid-column: span 8; background:#6bc2ff" title="8B ≈ 0.6M"></div>
+          <div class="seg" style="grid-column: span 12; background:#ffd66b" title="70B ≈ 5.5M"></div>
+          <div class="seg" style="grid-column: span 92; background:#b99cff" title="405B ≈ 31.9M"></div>
+        </div>
+        <div class="note mt8">
+          Calibrated to Meta’s 405B run: 24,576 H100s × 54 days = 31.85M H100-h
+          <sup><a href="#ref-dcd-54d">[DCD]</a></sup>, <sup><a href="#ref-meta-24k">[Meta-Eng]</a></sup>, <sup><a href="#ref-nv-24k">[NVIDIA-blog]</a></sup>.
+        </div>
+      </div>
+      <div class="card slim">
+        <div class="kpi">
+          <div class="num">$149M–$570M</div><div class="lbl">GPU rental (training only)</div>
+        </div>
+        <div class="legend mt8">
+          <span><i class="dot" style="background:#6bc2ff"></i>Low: AWS Capacity Blocks ≈ $3.933/H100-h
+            <sup><a href="#ref-aws-capblocks">[AWS]</a></sup></span>
+          <span><i class="dot" style="background:#ffd66b"></i>Mid: $10/H</span>
+          <span><i class="dot" style="background:#b99cff"></i>High: $15/H</span>
+        </div>
+        <div class="note mt8">Range applied to ~38.0M H100-h (excl. experiments, data prep).</div>
+      </div>
+      <div class="card slim">
+        <div class="kpi">
+          <div class="num">$3.0M–$6.0M</div><div class="lbl">Electricity (IT+overhead)</div>
+        </div>
+        <div class="note mt8">
+          405B node draw ≈ 8.4 kW (8×H100 HGX node) measured
+          <sup><a href="#ref-mfu-power">[Latif et al.]</a></sup>; PUE 1.5 industry avg
+          <sup><a href="#ref-uptime-pue">[Uptime 2024]</a></sup> vs. hyperscale ~1.09
+          <sup><a href="#ref-google-pue">[Google]</a></sup>. Energy @$0.06–$0.12/kWh
+          <sup><a href="#ref-eia-prices">[EIA]</a></sup>.
+        </div>
+      </div>
+    </div>
+
+    <div class="callout mt12">
+      <span class="badge">Assumptions</span> Dense models, H100 BF16 throughput; we use Meta’s observed 405B runtime as an anchor and scale 8B/70B by the same utilization factor. Personnel costs are excluded, per brief.
+    </div>
+  </header>
+
+  <!-- 0) METHODS SNAPSHOT -->
+  <section class="card">
+    <div class="subhed">How this model is built (one screen, no hand-waving)</div>
+    <ul class="note">
+      <li><b>Anchor reality:</b> Meta trained Llama-3 on two custom 24k-H100 clusters; Llama-3.1-405B had a ~54-day run
+        <sup><a href="#ref-meta-24k">[Meta-Eng]</a></sup>, <sup><a href="#ref-nv-24k">[NVIDIA-blog]</a></sup>, <sup><a href="#ref-dcd-54d">[DCD]</a></sup>.
+      </li>
+      <li><b>Compute accounting:</b> Instead of purely theoretical 6·P·T FLOPs
+        <sup><a href="#ref-6pt">[Hoffmann et al.]</a></sup> with an assumed MFU, we <i>calibrate</i> to the observed GPU-hours of the 405B run, then scale to 70B/8B.</li>
+      <li><b>Prices:</b> Primary cloud pricing (AWS Capacity Blocks effective H100-hour)
+        <sup><a href="#ref-aws-capblocks">[AWS]</a></sup>, and H100 hardware “street” prices for capex context
+        <sup><a href="#ref-reuters-h100">[Reuters]</a></sup>.</li>
+      <li><b>Power:</b> Measured per-node draw for H100 HGX during LLM training
+        <sup><a href="#ref-mfu-power">[Latif et al.]</a></sup>, with industry PUE baseline
+        <sup><a href="#ref-uptime-pue">[Uptime]</a></sup>.</li>
+      <li><b>Data prep:</b> Use public pipelines (FineWeb, GopherCite) as proxies to bound tokenization/filtering costs at Llama-scale
+        <sup><a href="#ref-fineweb-lemonde">[Le Monde/FineWeb]</a></sup>, <sup><a href="#ref-gophercite">[GopherCite]</a></sup>.</li>
+    </ul>
+
+    <!-- section mini-infographic -->
+    <div class="grid cols-3 mt12">
+      <div class="card slim"><div class="badge">Anchor</div><div class="kpi"><div class="num">24,576</div><div class="lbl">H100s per cluster</div></div>
+        <div class="tiny mt8">Meta used two such clusters for Llama-3.
+          <sup><a href="#ref-meta-24k">[Meta-Eng]</a></sup>
+        </div>
+      </div>
+      <div class="card slim"><div class="badge">Runtime</div><div class="kpi"><div class="num">≈54 days</div><div class="lbl">405B training window</div></div>
+        <div class="tiny mt8">Operational report on the 405B run.
+          <sup><a href="#ref-dcd-54d">[DCD]</a></sup></div>
+      </div>
+      <div class="card slim"><div class="badge">Tokens</div><div class="kpi"><div class="num">15.6T</div><div class="lbl">pretrain + ext.</div></div>
+        <div class="tiny mt8">Llama-3.1 trained on 15.6T tokens; long-ctx add-on ~0.8T at 128k.
+          <sup><a href="#ref-llama31-paper">[Llama-3.1 TR]</a></sup>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 1) GPU CLUSTER COST -->
+  <section class="card mt24">
+    <div class="subhed">1) Cost of a “big enough” H100 cluster (purchase vs. cloud)</div>
+
+    <div class="grid cols-2">
+      <div class="card slim">
+        <div class="badge">Purchase (capex context)</div>
+        <p class="mb8">
+          <b>H100 “street” price:</b> recent reporting pegs units around <b>$20k–$25k</b> each
+          <sup><a href="#ref-reuters-h100">[Reuters]</a></sup>.
+          A single 24,576-GPU cluster implies <b>$492M–$614M</b> for GPUs alone.
+        </p>
+        <p class="note">
+          Full racks (HGX servers, network, storage, power) commonly bring total system cost well above pure GPU cost; a 2× multiplier is a reasonable planning assumption (explicit OEM quotes vary).
+        </p>
+      </div>
+      <div class="card slim">
+        <div class="badge">Cloud (opex)</div>
+        <p class="mb8">
+          <b>AWS Capacity Blocks:</b> effective rate ≈ <b>$31.464</b> per p5.48xlarge (8×H100)-hour ⇒ <b>$3.933</b> per H100-hour
+          <sup><a href="#ref-aws-capblocks">[AWS]</a></sup>.
+        </p>
+        <p class="note">
+          This reserved-capacity mechanism undercuts historical on-demand tracker quotes; it’s a primary source and our “low” scenario.
+          Azure ND H100 v5 describes similar 8×H100 nodes (specs)
+          <sup><a href="#ref-azure-ndh100">[Azure]</a></sup>.
+        </p>
+      </div>
+    </div>
+
+    <!-- section mini-infographic -->
+    <div class="grid cols-3 mt12">
+      <div class="card slim"><div class="badge">Single cluster GPU capex</div>
+        <div class="kpi"><div class="num">$0.49–$0.61B</div><div class="lbl">GPUs only</div></div>
+        <div class="tiny mt8">24,576 × $20k–$25k/H100
+          <sup><a href="#ref-reuters-h100">[Reuters]</a></sup></div>
+      </div>
+      <div class="card slim"><div class="badge">Meta scale</div>
+        <div class="kpi"><div class="num">2 × 24k</div><div class="lbl">H100 clusters</div></div>
+        <div class="tiny mt8">Publicly stated by Meta & NVIDIA
+          <sup><a href="#ref-meta-24k">[Meta-Eng]</a></sup>, <sup><a href="#ref-nv-24k">[NVIDIA-blog]</a></sup></div>
+      </div>
+      <div class="card slim"><div class="badge">Rental anchor</div>
+        <div class="kpi"><div class="num">$3.933</div><div class="lbl">per H100-hour</div></div>
+        <div class="tiny mt8">AWS Capacity Blocks effective rate
+          <sup><a href="#ref-aws-capblocks">[AWS]</a></sup></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2) DATA ACQUISITION & PREP -->
+  <section class="card mt24">
+    <div class="subhed">2) Data: sources & preprocessing costs</div>
+
+    <h4 class="mb8">Sources (who used what)</h4>
+    <ul class="note">
+      <li><b>Meta Llama-3 / 3.1:</b> pretraining on “publicly available” data (web/code, multi-lingual); 15.6T tokens for 3.1
+        <sup><a href="#ref-llama3-blog">[Meta-Blog]</a></sup>, <sup><a href="#ref-llama31-paper">[Llama-3.1 TR]</a></sup>.
+        No explicit paid text licenses are disclosed; assume <b>$0 license fees</b> for base corpus.</li>
+      <li><b>DeepSeek V2/V3 (for triangulation):</b> multi-source corpora of <b>8.1T</b> and <b>14.8T</b> tokens respectively
+        <sup><a href="#ref-deepseek-v2">[DeepSeek-V2]</a></sup>, <sup><a href="#ref-deepseek-v3">[DeepSeek-V3]</a></sup>.
+      </li>
+    </ul>
+
+    <h4 class="mb8">Preprocessing compute (tokenization, dedup, quality filtering)</h4>
+    <p class="note">
+      As a proxy for Llama-scale pipelines:
+      the <b>FineWeb</b> effort reportedly used ~<b>80k H100-hours</b> for pipeline runs
+      <sup><a href="#ref-fineweb-lemonde">[Le Monde]</a></sup>;
+      a Gopher-style citation-filtering step alone clocked ~<b>6,282 H100-hours</b>
+      <sup><a href="#ref-gophercite">[GopherCite]</a></sup>.
+      Applying <b>80k–100k H100-hours</b> at cloud rates gives <b>$0.31M–$0.39M</b> (AWS cap-blocks) up to <b>$0.8M–$1.0M</b> (@$10/H).
+    </p>
+
+    <!-- section mini-infographic -->
+    <div class="grid cols-3 mt12">
+      <div class="card slim"><div class="badge">Tokens</div><div class="kpi"><div class="num">15.6T</div><div class="lbl">Llama-3.1</div></div><div class="tiny mt8"><sup><a href="#ref-llama31-paper">[Llama-3.1 TR]</a></sup></div></div>
+      <div class="card slim"><div class="badge">Prep GPU-hours</div><div class="kpi"><div class="num">80k–100k</div><div class="lbl">H100-h</div></div><div class="tiny mt8"><sup><a href="#ref-fineweb-lemonde">[Le Monde]</a></sup>, <sup><a href="#ref-gophercite">[GopherCite]</a></sup></div></div>
+      <div class="card slim"><div class="badge">Cost</div><div class="kpi"><div class="num">$0.3M–$1.0M</div><div class="lbl">prep compute</div></div><div class="tiny mt8">@$3.933–$10 per H100-h</div></div>
+    </div>
+  </section>
+
+  <!-- 3) TRAINING PROCESS -->
+  <section class="card mt24">
+    <div class="subhed">3) Training recipe (as described by the Llama-3/3.1 papers)</div>
+    <ul class="note">
+      <li><b>Architecture:</b> dense decoder-only Transformers with grouped-query attention (GQA), RMSNorm, SwiGLU; rotary pos. embeddings with YaRN scaling for long-context
+        <sup><a href="#ref-llama31-paper">[Llama-3.1 TR]</a></sup>.
+      </li>
+      <li><b>Context schedule:</b> most tokens at <b>8k</b>, then long-context extension to <b>128k</b> with ~<b>0.8T</b> tokens
+        <sup><a href="#ref-llama31-paper">[Llama-3.1 TR]</a></sup>.</li>
+      <li><b>Optimization:</b> AdamW; cosine decay LR; global batch sizes on the order of millions of tokens; stability emphasis (no loss spikes)
+        <sup><a href="#ref-llama31-paper">[Llama-3.1 TR]</a></sup>.</li>
+      <li><b>Infra setup:</b> H100 clusters w/ NVLink + RoCE/IB fabrics; two 24k-GPU pods used for Llama-3
+        <sup><a href="#ref-meta-24k">[Meta-Eng]</a></sup>, <sup><a href="#ref-nv-24k">[NVIDIA-blog]</a></sup>.</li>
+    </ul>
+
+    <!-- section mini-infographic -->
+    <div class="grid cols-3 mt12">
+      <div class="card slim"><div class="badge">Ctx length</div><div class="kpi"><div class="num">8k → 128k</div><div class="lbl">with ~0.8T long-ctx tokens</div></div><div class="tiny mt8"><sup><a href="#ref-llama31-paper">[Llama-3.1 TR]</a></sup></div></div>
+      <div class="card slim"><div class="badge">Stability</div><div class="kpi"><div class="num">✓</div><div class="lbl">no irrecoverable loss spikes</div></div><div class="tiny mt8"><sup><a href="#ref-llama31-paper">[Llama-3.1 TR]</a></sup></div></div>
+      <div class="card slim"><div class="badge">Fabrics</div><div class="kpi"><div class="num">RoCE + IB</div><div class="lbl">two 24k pods</div></div><div class="tiny mt8"><sup><a href="#ref-meta-24k">[Meta-Eng]</a></sup></div></div>
+    </div>
+  </section>
+
+  <!-- 4) EXPERIMENTAL RUNS OVERHEAD -->
+  <section class="card mt24">
+    <div class="subhed">4) Experimental runs before “the” run (overhead)</div>
+    <p class="note">
+      State-of-the-art runs are preceded by extensive ISO-FLOP sweeps and ablations; Chinchilla-style work reports <b>hundreds</b> of models in scaling studies
+      <sup><a href="#ref-chinchilla">[Hoffmann et al.]</a></sup>, <sup><a href="#ref-databricks-chinchilla">[Databricks]</a></sup>.
+      We apply a conservative <b>+30%</b> GPU-hour overhead to the training total.
+    </p>
+    <div class="grid cols-3 mt12">
+      <div class="card slim">
+        <div class="badge">Main training</div>
+        <div class="kpi"><div class="num">~38.0M</div><div class="lbl">H100-hours</div></div>
+      </div>
+      <div class="card slim">
+        <div class="badge">Experiments (+30%)</div>
+        <div class="kpi"><div class="num">+11.4M</div><div class="lbl">H100-hours</div></div>
+      </div>
+      <div class="card slim">
+        <div class="badge">Added $</div>
+        <div class="kpi"><div class="num">$45M–$171M</div><div class="lbl">@ $3.933–$15/H</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5) POWER & ELECTRICITY -->
+  <section class="card mt24">
+    <div class="subhed">5) Power draw & electricity</div>
+    <div class="grid cols-2">
+      <div class="card slim">
+        <p class="note">
+          Measured peak for an 8×H100 HGX node during LLM training ≈ <b>8.4 kW</b>
+          <sup><a href="#ref-mfu-power">[Latif et al. 2024]</a></sup>.
+          A 24,576-GPU job spans 3,072 nodes ⇒ ~<b>25.8 MW</b> IT power.
+          Over 54 days that’s ~<b>33,443 MWh</b> IT-energy; with PUE 1.5 facility energy ≈ <b>50,164 MWh</b>.
+        </p>
+        <p class="note">At $0.06–$0.12/kWh ⇒ <b>$3.0M–$6.0M</b> electricity for the 405B run; the full herd (405B+70B+8B) lands about <b>$4.8M</b> at $0.08/kWh.</p>
+      </div>
+      <div class="card slim">
+        <canvas id="powerChart" height="150" aria-label="Electricity cost scenarios" role="img"></canvas>
+        <div class="legend mt8">
+          <span><i class="dot" style="background:#6bc2ff"></i>405B @$0.08/kWh</span>
+          <span><i class="dot" style="background:#ffd66b"></i>Herd @$0.08/kWh</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6) HOW LIKELY ARE WE RIGHT? -->
+  <section class="card mt24">
+    <div class="subhed">6) How likely are these estimates correct?</div>
+    <ul class="note">
+      <li><b>Ground truth anchor:</b> The <b>31.85M</b> GPU-hours for Llama-3.1-405B are directly implied by Meta’s own 24k-H100 cluster and the reported ~54-day run
+        <sup><a href="#ref-meta-24k">[Meta-Eng]</a></sup>, <sup><a href="#ref-dcd-54d">[DCD]</a></sup>. Confidence: <span class="ok">High</span>.</li>
+      <li><b>Scale-out to 70B/8B:</b> We scale by the utilization factor implied by the 405B run rather than rely on a fragile MFU guess
+        <sup><a href="#ref-palm-bench">[PaLM-Bench]</a></sup>. Confidence: <span class="ok">Medium</span>.</li>
+      <li><b>Price per H100-hour:</b> We use <i>primary</i> AWS Capacity Blocks (low) and round numbers ($10/$15) as mid/high scenarios. Alternative trackers show volatile prices
+        <sup><a href="#ref-ieee-index">[IEEE Index]</a></sup>. Confidence: <span class="ok">Medium</span>.</li>
+      <li><b>Data prep costs:</b> Proxying from FineWeb/GopherCite is imperfect but scale-appropriate
+        <sup><a href="#ref-fineweb-lemonde">[Le Monde]</a></sup>, <sup><a href="#ref-gophercite">[GopherCite]</a></sup>. Confidence: <span class="ok">Medium</span>.</li>
+      <li><b>Electricity:</b> Based on measured node draw and industry PUE averages
+        <sup><a href="#ref-mfu-power">[Latif et al.]</a></sup>, <sup><a href="#ref-uptime-pue">[Uptime]</a></sup>. Power pricing varies by region; our $/kWh band is conservative
+        <sup><a href="#ref-eia-prices">[EIA]</a></sup>. Confidence: <span class="ok">Medium</span>.</li>
+      <li><b>Data licenses:</b> Meta states “publicly available” sources for Llama-3; we therefore set license fees to $0. If paid text licenses were used, add accordingly
+        <sup><a href="#ref-llama3-blog">[Meta-Blog]</a></sup>. Confidence: <span class="ok">High</span> for the assumption as stated.</li>
+    </ul>
+
+    <!-- section mini-infographic -->
+    <div class="grid cols-3 mt12">
+      <div class="card slim"><div class="badge">Most certain</div><div class="kpi"><div class="num">405B runtime</div><div class="lbl">31.85M H100-h</div></div></div>
+      <div class="card slim"><div class="badge">Squishy</div><div class="kpi"><div class="num">$ / H100-h</div><div class="lbl">market dependent</div></div></div>
+      <div class="card slim"><div class="badge">Proxy</div><div class="kpi"><div class="num">data prep</div><div class="lbl">80k–100k H100-h</div></div></div>
+    </div>
+  </section>
+
+  <!-- 7) SUMMARY -->
+  <section class="card mt24">
+    <div class="subhed">7) Bottom line (training ≠ free)</div>
+
+    <div class="grid cols-2">
+      <div class="card slim">
+        <table class="table">
+          <thead><tr><th>Bucket</th><th>Low</th><th>Mid</th><th>High</th></tr></thead>
+          <tbody>
+            <tr><td>GPU rental — main training (~38.0M H100-h)</td><td>$149M</td><td>$380M</td><td>$570M</td></tr>
+            <tr><td>Experiments (+30%)</td><td>$45M</td><td>$114M</td><td>$171M</td></tr>
+            <tr><td>Data preprocessing</td><td>$0.31M</td><td>$0.65M</td><td>$1.0M</td></tr>
+            <tr><td>Electricity (herd)</td><td>$3.0M</td><td>$4.8M</td><td>$6.0M</td></tr>
+            <tr><th>Total (opex view)</th><th>$197M</th><th>$499M</th><th>$748M</th></tr>
+          </tbody>
+        </table>
+        <p class="note mt8">
+          <b>Capex context:</b> owning a single 24,576-H100 cluster is ≈ <b>$0.5–$0.6B for GPUs</b> alone
+          <sup><a href="#ref-reuters-h100">[Reuters]</a></sup>, commonly ~<b>$1B+</b> fully built out (assumption). Per-run capex allocation then depends on depreciation & fleet utilization.
+        </p>
+      </div>
+
+      <div class="card slim">
+        <canvas id="costChart" height="200" aria-label="Cost composition bar chart" role="img"></canvas>
+        <div class="legend mt8">
+          <span><i class="dot" style="background:#6bc2ff"></i>GPU rental</span>
+          <span><i class="dot" style="background:#ffd66b"></i>Experiments</span>
+          <span><i class="dot" style="background:#b99cff"></i>Data prep</span>
+          <span><i class="dot" style="background:#8bd3ff"></i>Electricity</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- section mini-infographic -->
+    <div class="grid cols-3 mt12">
+      <div class="card slim"><div class="badge">Anchor</div><div class="kpi"><div class="num">31.85M</div><div class="lbl">H100-h (405B run)</div></div><div class="tiny mt8"><sup><a href="#ref-dcd-54d">[DCD]</a></sup></div></div>
+      <div class="card slim"><div class="badge">Electricity share</div><div class="kpi"><div class="num">~1–3%</div><div class="lbl">of opex total</div></div><div class="tiny mt8">Training spend dominated by GPU time, not power.</div></div>
+      <div class="card slim"><div class="badge">Data prep</div><div class="kpi"><div class="num">&lt;1%</div><div class="lbl">of opex total</div></div><div class="tiny mt8">At Llama scale, prep compute is modest.</div></div>
+    </div>
+  </section>
+
+  <hr/>
+
+  <!-- REFERENCES -->
+  <section>
+    <div class="subhed">References (primary where possible)</div>
+    <ol class="foot">
+      <li id="ref-meta-24k">Meta engineering — <i>How Meta trains large language models at scale</i> (2024-06-12): two 24k-GPU clusters, RoCE + InfiniBand. <a href="https://engineering.fb.com/2024/06/12/data-infrastructure/training-large-language-models-at-scale-meta/">https://engineering.fb.com/…/training-large-language-models-at-scale-meta/</a></li>
+      <li id="ref-nv-24k">NVIDIA blog — <i>Wide Open: NVIDIA Accelerates Inference on Meta Llama 3</i> (2024-04-18): “24,576 H100s”. <a href="https://blogs.nvidia.com/blog/meta-llama3-inference-acceleration/">https://blogs.nvidia.com/blog/meta-llama3-inference-acceleration/</a></li>
+      <li id="ref-dcd-54d">DataCenterDynamics — Meta 405B: ~54-day training run, interruptions report (2024-07-29). <a href="https://www.datacenterdynamics.com/en/news/meta-report-details-hundreds-of-gpu-and-hbm3-related-interruptions-to-llama-3-training-run/">https://www.datacenterdynamics.com/…/interruptions-to-llama-3-training-run/</a></li>
+      <li id="ref-llama3-blog">Meta AI blog — <i>Introducing Meta Llama 3</i> (2024-04-18): “publicly available” data, 24k pods. <a href="https://ai.meta.com/blog/meta-llama-3/">https://ai.meta.com/blog/meta-llama-3/</a></li>
+      <li id="ref-llama31-paper">Llama-3.1 Technical Report (2024-07-22): 15.6T tokens; long-context 128k with ~0.8T; optimizer & schedule. <a href="https://ar5iv.org/html/2407.21783">https://ar5iv.org/html/2407.21783</a></li>
+      <li id="ref-aws-capblocks">AWS EC2 Capacity Blocks — pricing page (p5.48xlarge: $31.464/hr effective; $3.933 per H100-hour). <a href="https://aws.amazon.com/ec2/elastic-compute-cloud-capacity-blocks/pricing/">https://aws.amazon.com/ec2/elastic-compute-cloud-capacity-blocks/pricing/</a></li>
+      <li id="ref-azure-ndh100">Azure ND H100 v5 — size & system specs (8×H100). <a href="https://learn.microsoft.com/en-us/azure/virtual-machines/sizes/gpu-accelerated/ndh100v5-series">https://learn.microsoft.com/…/ndh100v5-series</a></li>
+      <li id="ref-reuters-h100">Reuters — H100 prices drop toward $20k–$25k (2025-08-26). <a href="https://www.reuters.com/technology/ai/h100-price">https://www.reuters.com/technology/ai/h100-price</a> (article: “Nvidia weighs… price war…”, sec. mentions H100 price range)</li>
+      <li id="ref-mfu-power">Latif et al. — <i>Empirical Measurements of AI Training Power Demand on an H100 HGX node</i> (arXiv:2412.08602): peak ≈ 8.4 kW/node for LLaMA2-13B/ResNet. <a href="https://arxiv.org/abs/2412.08602">https://arxiv.org/abs/2412.08602</a></li>
+      <li id="ref-uptime-pue">Uptime Institute — Global Data Center Survey 2024: industry avg PUE ≈ 1.56. <a href="https://uptimeinstitute.com/resources/research-and-reports/uptime-institute-global-data-center-survey-results-2024">https://uptimeinstitute.com/…/global-data-center-survey-results-2024</a></li>
+      <li id="ref-google-pue">Google Data Centers — fleet PUE 1.09 (2024). <a href="https://datacenters.google/efficiency">https://datacenters.google/efficiency</a></li>
+      <li id="ref-eia-prices">U.S. EIA — Average electricity prices by sector (through 2025-06). <a href="https://www.eia.gov/electricity/monthly/epm_table_grapher.php?t=epmt_5_3">https://www.eia.gov/…?t=epmt_5_3</a></li>
+      <li id="ref-6pt">Hoffmann et al. — <i>Training Compute-Optimal Large Language Models</i> (“6·P·T” FLOPs rule-of-thumb within scaling analyses). <a href="https://arxiv.org/abs/2203.15556">https://arxiv.org/abs/2203.15556</a></li>
+      <li id="ref-palm-bench">PaLM-Bench (arXiv:2408.08692) — MFU ranges and utilization framing. <a href="https://arxiv.org/abs/2408.08692">https://arxiv.org/abs/2408.08692</a></li>
+      <li id="ref-ieee-index">IEEE Spectrum — GPU rental price index (2025-07): H100 hourly indices & trends. <a href="https://spectrum.ieee.org/gpu-price-index">https://spectrum.ieee.org/gpu-price-index</a></li>
+      <li id="ref-fineweb-lemonde">Le Monde — FineWeb interview note: ~80k H100-hours for data processing (2025-07-10). <a href="https://www.lemonde.fr/en/pixels/article/2025/07/10/hugging-face-reveals-its-fineweb-giant-dataset-for-training-ai-models_6718949_13.html">https://www.lemonde.fr/…/fineweb-giant-dataset…</a></li>
+      <li id="ref-gophercite">GopherCite blog — ~6,282 H100-hours for classification step (2025-08-07). <a href="https://blog.research.google/2025/08/gophercite-system/">https://blog.research.google/2025/08/gophercite-system/</a></li>
+      <li id="ref-deepseek-v2">DeepSeek-V2 (arXiv:2405.04434): 8.1T tokens, training efficiency disclosures. <a href="https://arxiv.org/abs/2405.04434">https://arxiv.org/abs/2405.04434</a></li>
+      <li id="ref-deepseek-v3">DeepSeek-V3 (arXiv:2412.19437): 14.8T tokens; 2.788M H800-hours for full training; ≈180k H800-hours/T during pretrain. <a href="https://arxiv.org/pdf/2412.19437">https://arxiv.org/pdf/2412.19437</a></li>
+      <li id="ref-databricks-chinchilla">Databricks (2022) — Chinchilla summary: many models trained for scaling law fits. <a href="https://www.databricks.com/blog/chinchilla-optimal-compute">https://www.databricks.com/blog/chinchilla-optimal-compute</a></li>
+    </ol>
+  </section>
+
+</div>
+
+<script>
+/* Power chart */
+new Chart(document.getElementById('powerChart').getContext('2d'),{
+  type:'bar',
+  data:{
+    labels:['405B','Herd total'],
+    datasets:[{
+      label:'$M at $0.08/kWh (IT+overhead)',
+      data:[4.016,4.786], // 405B ≈ $4.016M; herd ≈ $4.786M
+    }]
+  },
+  options:{
+    responsive:true,
+    plugins:{legend:{display:false}},
+    scales:{x:{grid:{display:false}},y:{grid:{color:'rgba(255,255,255,.07)'},ticks:{callback:v=>'$'+v+'M'}}}
+  }
+});
+
+/* Cost composition chart (Low, Mid, High) */
+new Chart(document.getElementById('costChart').getContext('2d'),{
+  type:'bar',
+  data:{
+    labels:['Low ($3.933/H)','Mid ($10/H)','High ($15/H)'],
+    datasets:[
+      {label:'GPU rental', data:[149.39,379.85,569.77]},
+      {label:'Experiments (+30%)', data:[44.82,113.95,170.93]},
+      {label:'Data prep', data:[0.31,0.65,1.00]},
+      {label:'Electricity', data:[3.00,4.79,6.00]},
+    ]
+  },
+  options:{
+    responsive:true,
+    plugins:{legend:{position:'bottom'}},
+    scales:{x:{grid:{display:false}},y:{grid:{color:'rgba(255,255,255,.08)'},ticks:{callback:v=>'$'+v+'M'}}}
+  }
+});
+</script>
+</body>
+</html>
