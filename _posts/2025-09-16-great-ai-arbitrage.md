@@ -72,10 +72,6 @@ As we have seen above, the major foundation model providers can already provide 
 It would be fair to say that a major chunk of the daily active users of these chat-style applications are employees of the very enterprises that report little to no gains in efficiency with generative AI (more on that soon). 
 
 What I find remarkable about this figure is that a significant share of employees reporting productivity boost with tools such as ChatGPT are using their private subscriptions to these services, for professional purpose (the “shadow economy”).
-
-> *"A significant number of workers already use AI tools privately, reporting productivity gains, while their companies' formal AI initiatives stall." State of AI in Business 2025, MIT NANDA*
-> 
-
 The reason this fact is remarkable is that these employees have wildly different feedback for the task-specific generative AI tooling and solutions that their own companies were developing at the time.  
 
 > *"A significant number of workers already use AI tools privately, reporting productivity gains, while their companies' formal AI initiatives stall." State of AI in Business 2025, MIT NANDA*
